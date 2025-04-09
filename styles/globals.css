@@ -24,3 +24,49 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+
+@layer utilities {
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .fade-in {
+    animation: fadeIn 2s ease-out;
+  }
+
+  @keyframes candleFlicker {
+    0%   { opacity: 0.95; filter: brightness(1); }
+    25%  { opacity: 1;    filter: brightness(1.1); }
+    50%  { opacity: 0.9;  filter: brightness(0.9); }
+    75%  { opacity: 1;    filter: brightness(1.05); }
+    100% { opacity: 0.95; filter: brightness(1); }
+  }
+
+  .flicker {
+    animation: candleFlicker 1.2s infinite;
+  }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+  75% { opacity: 0.4; }
+}
+
+.flicker-delay-1 {
+  animation: flicker 1.4s infinite ease-in-out;
+  animation-delay: 0s;
+}
+
+.flicker-delay-2 {
+  animation: flicker 1.6s infinite ease-in-out;
+  animation-delay: 0.3s;
+}
+
+.flicker-delay-3 {
+  animation: flicker 1.3s infinite ease-in-out;
+  animation-delay: 0.6s;
+}
