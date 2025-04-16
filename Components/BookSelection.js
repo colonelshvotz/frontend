@@ -1,6 +1,8 @@
 import React from "react";
 import { useEffect } from "react";
 
+const API = process.env.NEXT_PUBLIC_API_BASE;
+
 export default function BookSelection({
   books,
   setBooks,
