@@ -37,6 +37,8 @@ export default function BookshelfPage() {
   const [empathyData, setEmpathyData] = useState(null);
   const [showDevPanel, setShowDevPanel] = useState(false);
 
+  const baseURL = process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, "");
+
 
 const API = process.env.NEXT_PUBLIC_API_BASE;
 
@@ -81,7 +83,7 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
     
     try {
       setLoading(true);
-      const res = await fetch(`${API}/load-book`, {
+      const res = await fetch(`${baseURL}/load-book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
