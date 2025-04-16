@@ -15,7 +15,7 @@ export default function BookSelection({
   setGenre
 }) {
   useEffect(() => {
-    fetch("http://localhost:8000/list-books")
+    fetch(`${API}/list-books`)
       .then((res) => res.json())
       .then((data) => setBooks(data.books || []))
       .catch((err) => console.error("Failed to load books", err));
