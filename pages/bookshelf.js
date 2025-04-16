@@ -38,15 +38,13 @@ export default function BookshelfPage() {
   const [showDevPanel, setShowDevPanel] = useState(false);
 
 
-const API = "https://maincharacterbackend-ads.replit.app/";
-
-
+const API = process.env.NEXT_PUBLIC_API_BASE;
 
 
 const fetchEmpathyScores = async () => {
   try {
     const res = await fetch(`${API}/developer/trait-scores`, {
-  method: "POST",
+  method: "GET",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify(payload),
 });
@@ -83,7 +81,7 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
     
     try {
       setLoading(true);
-      const res = await fetch("${API}/load-book", {
+      const res = await fetch(`${API}/load-book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -110,7 +108,7 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
 
     setStory((prev) => [...prev, `> ${userInput}`]);
     try {
-      const response = await fetch("${API}/continue", {
+      const response = await fetch(`${API}/continue`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_input: userInput }),
@@ -125,7 +123,7 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
 
   const downloadStory = async () => {
     try {
-      const response = await fetch("${API}/export-story", {
+      const response = await fetch(`${API}/export-story`, {
         method: "POST",
       });
       const blob = await response.blob();
@@ -145,7 +143,7 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
     setLoading(true);
     setError("");
     try {
-      const response = await fetch("${API}/generate-moment-image", {
+      const response = await fetch(`${API}/generate-moment-image`, {
         method: "POST",
       });
       const data = await response.json();
@@ -245,7 +243,7 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
         empathyData={empathyData}
         setShowDevPanel={setShowDevPanel}
         handleManualChapterSave={async () => {
-          const res = await fetch("${API}/test-chapter", {
+          const res = await fetch(`${API}/test-chapter`, {
             method: "POST",
           });
           const data = await res.json();
@@ -253,7 +251,7 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
         }}
         handleSaveAndExit={async () => {
           try {
-            const res = await fetch("${API}/save-progress", {
+            const res = await fetch(`${API}/save-progress`, {
               method: "POST",
             });
             const data = await res.json();
