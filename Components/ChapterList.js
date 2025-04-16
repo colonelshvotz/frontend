@@ -21,7 +21,7 @@ export default function ChapterList({ selectedBook, books }) {
             <button
               onClick={async () => {
                 const res = await fetch(
-                  `http://localhost:8000/export-chapter?book_title=${encodeURIComponent(
+                  `${API}/export-chapter?book_title=${encodeURIComponent(
                     selectedBook
                   )}&chapter_index=${idx}`
                 );
