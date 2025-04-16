@@ -2,6 +2,9 @@ import React from "react";
 import { useEffect } from "react";
 
 const API = process.env.NEXT_PUBLIC_API_BASE;
+const baseURL = process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, "");
+
+
 
 export default function BookSelection({
   books,
@@ -17,7 +20,7 @@ export default function BookSelection({
   setGenre
 }) {
   useEffect(() => {
-    fetch(`${API}/list-books`)
+    fetch(`${baseURL}/list-books`)
       .then((res) => res.json())
       .then((data) => setBooks(data.books || []))
       .catch((err) => console.error("Failed to load books", err));
