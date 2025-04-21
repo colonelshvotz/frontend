@@ -45,11 +45,10 @@ const API = process.env.NEXT_PUBLIC_API_BASE;
 
 const fetchEmpathyScores = async () => {
   try {
-    const res = await fetch(`${baseURL}/developer/trait-scores`, {
-  method: "GET",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(payload),
-});
+    const res = await fetch(`${baseURL}/developer/trait-scores`);
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.status}`);
+    }
     const data = await res.json();
     setEmpathyData(data);          // reuse existing state
     setShowDevPanel(true);         // opens your developer panel
@@ -57,6 +56,7 @@ const fetchEmpathyScores = async () => {
     console.error("Failed to load trait scores:", err);
   }
 };
+
 
 const [narratorStyle, setNarratorStyle] = useState("neutral");
 
