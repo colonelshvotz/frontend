@@ -31,25 +31,30 @@ export default function DeveloperTools({
             <p className="text-white mb-1">
               <strong>{char.character}</strong> (Book: <em>{char.book}</em>)
             </p>
+          
             <ul className="grid grid-cols-2 gap-x-6 text-white text-sm">
-              {traits.map((trait) => (
-                <li key={trait}>
-                  <strong className="capitalize">{trait.replace("_", " ")}:</strong>{" "}
-                  {char.averages[trait]}{" "}
-                  <span className="text-gray-400">(n={char.counts[trait]})</span>
-                </li>
-              ))}
-            </ul>
+  {Object.entries(char.traits).map(([trait, stat]) => (
+    <li key={trait}>
+      <strong className="capitalize">{trait.replace("_", " ")}:</strong> {stat.average}{" "}
+      <span className="text-gray-400">(n={stat.count})</span>
+    </li>
+  ))}
+</ul>
+
+              
             <details className="mt-2 text-xs text-gray-300">
               <summary className="cursor-pointer hover:text-white">🔍 View All Scores</summary>
+              
               <ul className="mt-1">
-                {traits.map((trait) => (
-                  <li key={trait}>
-                    <strong className="capitalize">{trait.replace("_", " ")}:</strong>{" "}
-                    {char.scores[trait]?.join(", ") || "None"}
-                  </li>
-                ))}
-              </ul>
+  {Object.entries(char.traits).map(([trait, stat]) => (
+    <li key={trait}>
+      <strong className="capitalize">{trait.replace("_", " ")}:</strong>{" "}
+      {stat.all_scores?.join(", ") || "None"}
+    </li>
+  ))}
+</ul>
+
+                
             </details>
           </div>
         ))}
