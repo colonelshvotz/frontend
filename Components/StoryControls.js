@@ -81,8 +81,7 @@ export default function StoryControls({
         onClick={handleManualChapterSave}
         className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded mt-4"
       >
-         
-          {loading ? "Saving..." : "🧪 Save Chapter"}
+          🧪 Save Chapter
       </button>
 
       <button
