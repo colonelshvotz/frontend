@@ -25,9 +25,18 @@ export default function ChapterList({ selectedBook, books }) {
             </div>
             <button
               onClick={async () => {
-                const res = await fetch(
-                  `${API}/export-chapter/${encodeURIComponent(selectedBook)}/${idx}`
-                );
+                
+                try {
+                  const res = await fetch(
+                    `${API.replace(/\/$/, "")}/export-chapter/${encodeURIComponent(selectedBook)}/${idx}`
+                  );
+              
+                  if (!res.ok) {
+                    throw new Error("Failed to export chapter");
+                  }
+
+
+                
                 const data = await res.json();
 
                 // Convert base64 back to blob
