@@ -25,7 +25,6 @@ export default function ChapterList({ selectedBook, books }) {
             </div>
             <button
               onClick={async () => {
-                
                 try {
                   const res = await fetch(
                     `${API.replace(/\/$/, "")}/export-chapter/${encodeURIComponent(selectedBook)}/${idx}`
@@ -34,28 +33,30 @@ export default function ChapterList({ selectedBook, books }) {
                   if (!res.ok) {
                     throw new Error("Failed to export chapter");
                   }
-
-
-                
-                const data = await res.json();
-
-                // Convert base64 back to blob
-                const byteCharacters = atob(data.filedata);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                  byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-                const blob = new Blob([byteArray], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
               
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = `Chapter_${idx + 1}.docx`;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
+                  const data = await res.json();
+              
+                  const byteCharacters = atob(data.filedata);
+                  const byteNumbers = new Array(byteCharacters.length);
+                  for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                  }
+                  const byteArray = new Uint8Array(byteNumbers);
+                  const blob = new Blob([byteArray], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+              
+                  const url = window.URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `Chapter_${idx + 1}.docx`;
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                } catch (err) {
+                  console.error(err);
+                  alert("Download failed!");
+                }
               }}
+
               className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-sm"
             >
               📥 Download
