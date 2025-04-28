@@ -27,7 +27,17 @@ export default function ChapterList({ selectedBook, books }) {
                 const res = await fetch(
                   `${API}/export-chapter/${encodeURIComponent(selectedBook)}/${idx}`
                 );
-                const blob = await res.blob();
+                const data = await res.json();
+
+                // Convert base64 back to blob
+                const byteCharacters = atob(data.filedata);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+              
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
