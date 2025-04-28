@@ -2,7 +2,8 @@ import React from "react";
 
 import { useEffect } from "react";
 
-const API = process.env.NEXT_PUBLIC_API_BASE.replace(/\/$/, "");
+const API = process.env.NEXT_PUBLIC_API_BASE;
+const baseURL = process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, "");
 
 export default function ChapterList({ selectedBook, books }) {
   const book = books.find((b) => b.title === selectedBook);
