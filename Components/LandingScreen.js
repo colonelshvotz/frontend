@@ -7,7 +7,7 @@ export default function LandingScreen() {
   const router = useRouter();
 
   const handleStart = () => {
-    router.push("/bookshelf"); // or change to '/' if your bookshelf is the homepage
+    router.push("/instructions"); // or change to '/' if your bookshelf is the homepage
   };
 
   return (
