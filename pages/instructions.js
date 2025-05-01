@@ -11,7 +11,7 @@ export default function InstructionsPage() {
         This is a virtual bookshelf! Create a new book, set its genre, then create your first main character for your first chapter by naming them, describing them physically for your portrait, then creating a prompt for your first chapter or letting the system make one up for you.
         </p>
         <p className="mb-4">
-        In this adventure, you control the main character, and you write a novel with your decisions. You'll explore, make decisions, and shape the world. You decide what happens next. 
+        In this adventure, you control the main character, and you write a novel with your decisions. You'll explore, make decisions, and shape the world. You decide what happens next. The AI follows you - if you want it to happen, it'll happen.
         </p>
         <p className="mb-4">
         When you're happy with the arc of your chapter, select 'Save Chapter' then 'Exit to Bookshelf' if you want to start the next chapter with a new character. The characters in the book will remember everything you've done.
