@@ -39,6 +39,9 @@ export default function BookshelfPage() {
 
   const baseURL = process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, "");
 
+  const [isSavingChapter, setIsSavingChapter] = useState(false);
+
+
 
 const API = process.env.NEXT_PUBLIC_API_BASE;
 
@@ -245,12 +248,20 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
         empathyData={empathyData}
         setShowDevPanel={setShowDevPanel}
         handleManualChapterSave={async () => {
-          const res = await fetch(`${baseURL}/test-chapter`, {
-            method: "POST",
-          });
-          const data = await res.json();
-          alert(data.message);
-        }}
+            setIsSavingChapter(true);
+            try {
+              const res = await fetch(`${baseURL}/test-chapter`, {
+                method: "POST",
+              });
+              const data = await res.json();
+              alert(data.message);
+            } catch (err) {
+              console.error("Failed to save chapter", err);
+            } finally {
+              setIsSavingChapter(false);
+            }
+          }}
+
         handleSaveAndExit={async () => {
           try {
             const res = await fetch(`${baseURL}/save-progress`, {
