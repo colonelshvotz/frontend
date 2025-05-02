@@ -10,6 +10,8 @@ export default function StoryControls({
   setShowDevPanel,
   handleManualChapterSave,
   handleSaveAndExit,
+  isExporting,
+  isSavingChapter,
   loading,
 }) {
   return (
@@ -32,11 +34,14 @@ export default function StoryControls({
       )}
 
       <button
-        onClick={downloadStory}
-        className="bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded w-full"
-      >
-        📄 Download Story as Word Doc
-      </button>
+      onClick={downloadStory}
+      disabled={isExporting}
+      className={`bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded ${
+        isExporting ? 'opacity-50 cursor-not-allowed' : ''
+      }`}
+    >
+      {isExporting ? 'Exporting...' : '📤 Export Story to Word Doc'}
+    </button>
 
       <button
         onClick={fetchEmpathyScores}
@@ -78,11 +83,15 @@ export default function StoryControls({
 
 
      <button
-         onClick={handleManualChapterSave}
-         className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded mt-4"
-       >
-           🧪 Save Chapter
-       </button>
+  onClick={handleManualChapterSave}
+  disabled={isSavingChapter}
+  className={`bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded mt-4 ${
+    isSavingChapter ? 'opacity-50 cursor-not-allowed' : ''
+  }`}
+>
+  {isSavingChapter ? 'Saving...' : '🧪 Save Chapter'}
+</button>
+
 
       <button
         onClick={handleSaveAndExit}
