@@ -37,6 +37,10 @@ export default function BookshelfPage() {
   const [empathyData, setEmpathyData] = useState(null);
   const [showDevPanel, setShowDevPanel] = useState(false);
 
+  const [isExporting, setIsExporting] = useState(false);
+  const [isSavingChapter, setIsSavingChapter] = useState(false);
+
+
   const baseURL = process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, "");
 
  
@@ -127,22 +131,24 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
   };
 
   const downloadStory = async () => {
-    try {
-      const response = await fetch(`${baseURL}/export-story`, {
-        method: "POST",
-      });
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "My_Story.docx";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    } catch (error) {
-      console.error("Error exporting story:", error);
-    }
-  };
+  setIsExporting(true);
+  try {
+    const response = await fetch(`${baseURL}/export-story`, { method: "POST" });
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "My_Story.docx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  } catch (error) {
+    console.error("Error exporting story:", error);
+  } finally {
+    setIsExporting(false);
+  }
+};
+
 
   const generateMomentImage = async () => {
     setLoading(true);
@@ -247,13 +253,23 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
         showDevPanel={showDevPanel}
         empathyData={empathyData}
         setShowDevPanel={setShowDevPanel}
+        isSavingChapter={isSavingChapter}
+        isExporting={isExporting}
         handleManualChapterSave={async () => {
-           const res = await fetch(`${baseURL}/test-chapter`, {
-             method: "POST",
-           });
-           const data = await res.json();
-           alert(data.message);
-         }}
+  setIsSavingChapter(true);
+  try {
+    const res = await fetch(`${baseURL}/test-chapter`, {
+      method: "POST",
+    });
+    const data = await res.json();
+    alert(data.message);
+  } catch (err) {
+    console.error("Failed to save chapter", err);
+  } finally {
+    setIsSavingChapter(false);
+  }
+}}
+
 
         handleSaveAndExit={async () => {
           try {
