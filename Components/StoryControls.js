@@ -9,7 +9,6 @@ export default function StoryControls({
   empathyData,
   setShowDevPanel,
   handleManualChapterSave,
-  isSavingChapter={isSavingChapter},
   handleSaveAndExit,
   loading,
 }) {
@@ -78,15 +77,12 @@ export default function StoryControls({
 )}
 
 
-      <button
-  onClick={handleManualChapterSave}
-  disabled={isSavingChapter}
-  className={`bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded mt-4 ${
-    isSavingChapter ? 'opacity-50 cursor-not-allowed' : ''
-  }`}
->
-  {isSavingChapter ? 'Saving...' : '🧪 Save Chapter'}
-</button>
+     <button
+         onClick={handleManualChapterSave}
+         className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded mt-4"
+       >
+           🧪 Save Chapter
+       </button>
 
       <button
         onClick={handleSaveAndExit}
