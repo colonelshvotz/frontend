@@ -67,7 +67,7 @@ export default function ChapterList({ selectedBook, books }) {
       <button
       className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded mt-4"
       onClick={async () => {
-        const res = await fetch(`${API}/export-book/${encodeURIComponent(selectedBook)}`);
+        const res = await fetch(`${baseURL}/export-book/${encodeURIComponent(selectedBook)}`);
         const blob = await res.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
