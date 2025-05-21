@@ -64,6 +64,21 @@ export default function ChapterList({ selectedBook, books }) {
           </li>
         ))}
       </ul>
+      <button
+      className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded mt-4"
+      onClick={async () => {
+        const res = await fetch(`${API}/export-book/${encodeURIComponent(selectedBook)}`);
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${selectedBook}_Full_Book.docx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }}
+    >
+      📘 Download Full Book
+    </button>
     </div>
   );
 }
