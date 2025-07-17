@@ -21,6 +21,8 @@ export default function CharacterSelection({
   startStory,
   loading,
   error,
+  readingLevel,
+  setReadingLevel
 }) {
   const bookData = books.find((b) => b.title === selectedBook);
 
@@ -93,7 +95,7 @@ export default function CharacterSelection({
           />
           <label>Skip image generation (testing mode)</label>
         </div>
-
+{/*
         <label className="block mt-4">
   <span className="text-gray-700 font-medium">Narrator Style</span>
   <select
@@ -109,6 +111,21 @@ export default function CharacterSelection({
     <option value="noir">Hardboiled Noir</option>
     <option value="fantastical">Hard Fantasy</option>
   </select>
+</label>
+*/}
+
+<label className="block mt-4">
+  <span className="text-gray-700 font-medium">Reading Level (Lexile or Age)</span>
+  <input
+    className="mt-1 block w-full p-2 rounded border-gray-300 shadow-sm bg-[#2c261f] text-white"
+    type="text"
+    placeholder="e.g. 8, 700L, age 12"
+    value={readingLevel}
+    onChange={(e) => setReadingLevel(e.target.value)}
+  />
+  <span className="text-gray-400 text-xs">
+    (Optional) Enter a Lexile (e.g. 700L) or age (e.g. 8 or 10). The story will match the reading level.
+  </span>
 </label>
 
         <button

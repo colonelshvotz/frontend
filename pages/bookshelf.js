@@ -40,6 +40,8 @@ export default function BookshelfPage() {
   const [isExporting, setIsExporting] = useState(false);
   const [isSavingChapter, setIsSavingChapter] = useState(false);
 
+  const [readingLevel, setReadingLevel] = useState("");
+
 
   const baseURL = process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, "");
 
@@ -86,6 +88,7 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
       let_ai_decide: letAIChoose,
       skip_image: skipImage,
       narrator_style: narratorStyle,
+      reading_level: readingLevel,
     };
     
     try {
@@ -222,6 +225,8 @@ const [narratorStyle, setNarratorStyle] = useState("neutral");
             startStory={startStory}
             loading={loading}
             error={error}
+            readingLevel={readingLevel}
+            setReadingLevel={setReadingLevel}
           />
         )}
       </div>
