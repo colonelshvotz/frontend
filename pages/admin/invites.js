@@ -19,11 +19,11 @@ export default function InviteAdminPage() {
   const [authLoading, setAuthLoading] = useState(false);
 
   // Form state
-  const [genre, setGenre] = useState("fantasy");
-  const [characterName, setCharacterName] = useState("");
-  const [characterDescription, setCharacterDescription] = useState("");
+  //const [genre, setGenre] = useState("fantasy");
+  //const [characterName, setCharacterName] = useState("");
+  //const [characterDescription, setCharacterDescription] = useState("");
   const [storyIdea, setStoryIdea] = useState("");
-  const [narratorStyle, setNarratorStyle] = useState("neutral");
+  //const [narratorStyle, setNarratorStyle] = useState("neutral");
   const [readingLevel, setReadingLevel] = useState("");
   const [letAIDecide, setLetAIDecide] = useState(true);
   const [rules, setRules] = useState(""); // Scenario rules (one per line)
@@ -141,10 +141,7 @@ export default function InviteAdminPage() {
 
   // Create a new invite
   const createInvite = async () => {
-    if (!characterName.trim()) {
-      setError("Character name is required.");
-      return;
-    }
+    
 
     setLoading(true);
     setError("");
@@ -160,13 +157,12 @@ export default function InviteAdminPage() {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify({
-          genre,
-          character_name: characterName,
-          character_description: characterDescription,
+          //genre,
+          
           story_idea: storyIdea,
           let_ai_decide: letAIDecide,
           skip_image: true,
-          narrator_style: narratorStyle,
+          //narrator_style: narratorStyle,
           reading_level: readingLevel || null,
           rules: rulesArray,
         }),
@@ -191,8 +187,7 @@ export default function InviteAdminPage() {
       fetchInvites();
 
       // Clear form
-      setCharacterName("");
-      setCharacterDescription("");
+      
       setStoryIdea("");
       setRules("");
     } catch (err) {
@@ -304,74 +299,11 @@ export default function InviteAdminPage() {
         <div className="bg-gray-800 rounded-lg p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4">Create New Invite</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            {/* Genre */}
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Genre</label>
-              <select
-                value={genre}
-                onChange={(e) => setGenre(e.target.value)}
-                className="w-full p-2 bg-gray-700 rounded text-white"
-              >
-                <option value="fantasy">Fantasy</option>
-                <option value="sci-fi">Sci-Fi</option>
-                <option value="mystery">Mystery</option>
-                <option value="horror">Horror</option>
-                <option value="western">Western</option>
-                <option value="romance">Romance</option>
-                <option value="adventure">Adventure</option>
-                <option value="historical">Historical</option>
-              </select>
-            </div>
+          
 
-            {/* Narrator Style */}
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">Narrator Style</label>
-              <select
-                value={narratorStyle}
-                onChange={(e) => setNarratorStyle(e.target.value)}
-                className="w-full p-2 bg-gray-700 rounded text-white"
-              >
-                <option value="neutral">Neutral</option>
-                <option value="dramatic">Dramatic</option>
-                <option value="humorous">Humorous</option>
-                <option value="dark">Dark</option>
-                <option value="poetic">Poetic</option>
-              </select>
-            </div>
-          </div>
+          
 
-          {/* Character Name */}
-          <div className="mb-4">
-            <label className="block text-sm text-gray-400 mb-1">Character Name *</label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={characterName}
-                onChange={(e) => setCharacterName(e.target.value)}
-                placeholder="e.g., Elara Nightshade"
-                className="flex-1 p-2 bg-gray-700 rounded text-white"
-              />
-              <button
-                onClick={generateRandomName}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded text-sm"
-              >
-                Random
-              </button>
-            </div>
-          </div>
-
-          {/* Character Description */}
-          <div className="mb-4">
-            <label className="block text-sm text-gray-400 mb-1">Character Description</label>
-            <textarea
-              value={characterDescription}
-              onChange={(e) => setCharacterDescription(e.target.value)}
-              placeholder="Brief description of the character's appearance and background..."
-              className="w-full p-2 bg-gray-700 rounded text-white h-20"
-            />
-          </div>
-
+         
           {/* Story Idea */}
           <div className="mb-4">
             <label className="block text-sm text-gray-400 mb-1">Story Premise</label>
@@ -504,8 +436,8 @@ export default function InviteAdminPage() {
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium">{invite.character_name}</span>
-                      <span className="text-sm text-gray-400">({invite.genre})</span>
+                      <span className="font-medium">{invite.participant_id || "—"}</span>
+                      
                       <span
                         className={`text-xs px-2 py-0.5 rounded ${getStatusColor(invite.status)}`}
                       >

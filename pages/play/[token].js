@@ -13,25 +13,21 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-// Reuse your existing StoryDisplay component
 import StoryDisplay from "../../Components/StoryDisplay";
 
 export default function PlayInvitePage() {
   const router = useRouter();
   const { token } = router.query;
 
-  // State
-  const [status, setStatus] = useState("loading"); // loading, validating, ready, playing, ended, error
+  const [status, setStatus] = useState("loading");
   const [error, setError] = useState("");
   const [story, setStory] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [characterName, setCharacterName] = useState("");
-  const [genre, setGenre] = useState("");
+  const [idNumber, setIdNumber] = useState(""); // participant-entered value
 
   const baseURL = process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, "");
-
-  
 
   // Validate token on mount
   useEffect(() => {
@@ -49,9 +45,6 @@ export default function PlayInvitePage() {
           return;
         }
 
-        // Token is valid
-        setCharacterName(data.character_name);
-        setGenre(data.genre);
         setStatus("ready");
       } catch (err) {
         console.error("Error validating token:", err);
@@ -65,6 +58,11 @@ export default function PlayInvitePage() {
 
   // Start the story
   const startStory = async () => {
+    if (!idNumber.trim()) {
+      setError("Please enter your ID number.");
+      return;
+    }
+
     setLoading(true);
     setStatus("playing");
 
@@ -72,6 +70,7 @@ export default function PlayInvitePage() {
       const res = await fetch(`${baseURL}/start-invite/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ character_name: idNumber.trim() }),
       });
 
       const data = await res.json();
@@ -84,7 +83,6 @@ export default function PlayInvitePage() {
 
       setStory([data.story]);
       setCharacterName(data.character_name);
-      setGenre(data.genre);
     } catch (err) {
       console.error("Error starting story:", err);
       setError("Failed to start story. Please try again.");
@@ -102,7 +100,6 @@ export default function PlayInvitePage() {
     const userInput = input;
     setInput("");
 
-    // Add user input to display immediately
     setStory((prev) => [...prev, `> ${userInput}`]);
 
     try {
@@ -116,13 +113,11 @@ export default function PlayInvitePage() {
 
       if (!res.ok) {
         setError(data.detail || "Failed to continue story.");
-        // Don't set status to error - let them see what happened
         return;
       }
 
       setStory((prev) => [...prev, data.story]);
 
-      // Check if story ended
       if (data.ended) {
         setStatus("ended");
       }
@@ -136,7 +131,6 @@ export default function PlayInvitePage() {
 
   // === RENDER ===
 
-  // Loading state
   if (status === "loading" || status === "validating") {
     return (
       <div className="min-h-screen bg-[#12110f] text-white flex items-center justify-center">
@@ -148,7 +142,6 @@ export default function PlayInvitePage() {
     );
   }
 
-  // Error state
   if (status === "error") {
     return (
       <div className="min-h-screen bg-[#12110f] text-white flex items-center justify-center px-4">
@@ -164,7 +157,6 @@ export default function PlayInvitePage() {
     );
   }
 
-  // Ready to start state
   if (status === "ready") {
     return (
       <div className="min-h-screen bg-[#12110f] text-white flex items-center justify-center px-4">
@@ -172,8 +164,21 @@ export default function PlayInvitePage() {
           <div className="text-6xl mb-4">📖</div>
           <h1 className="text-3xl font-bold mb-2">Your Story Awaits</h1>
           <p className="text-gray-400 mb-6">
-            You're about to begin an interactive {genre} adventure as <strong>{characterName}</strong>.
+            You're about to begin an interactive session.
           </p>
+
+          <div className="mb-6 text-left">
+            <label className="block text-sm text-gray-400 mb-1">ID Number</label>
+            <input
+              type="text"
+              value={idNumber}
+              onChange={(e) => setIdNumber(e.target.value)}
+              placeholder="Enter your ID number"
+              className="w-full p-3 bg-gray-700 rounded text-white"
+              autoFocus
+            />
+          </div>
+
           <div className="bg-gray-800 rounded-lg p-4 mb-6 text-left text-sm text-gray-300">
             <p className="mb-2"><strong>⚠️ Important:</strong></p>
             <ul className="list-disc list-inside space-y-1">
@@ -185,7 +190,7 @@ export default function PlayInvitePage() {
           </div>
           <button
             onClick={startStory}
-            disabled={loading}
+            disabled={loading || !idNumber.trim()}
             className="px-8 py-4 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xl font-semibold transition-colors disabled:opacity-50"
           >
             {loading ? "Starting..." : "Begin Your Adventure"}
@@ -195,24 +200,21 @@ export default function PlayInvitePage() {
     );
   }
 
-  // Story ended state
   if (status === "ended") {
     return (
       <div className="min-h-screen bg-[#12110f] text-white p-4">
         <div className="max-w-3xl mx-auto">
-          {/* Show the complete story */}
           <div className="bg-gray-800 rounded-lg p-6 mb-6 max-h-[60vh] overflow-y-auto">
             {story.map((chunk, i) => (
               <p key={i} className="mb-3 whitespace-pre-wrap">{chunk}</p>
             ))}
           </div>
 
-          {/* Completion message */}
           <div className="text-center py-8">
             <div className="text-6xl mb-4">🎭</div>
             <h1 className="text-3xl font-bold mb-4">Your Story Has Concluded</h1>
             <p className="text-gray-400 mb-6">
-              Thank you for playing as <strong>{characterName}</strong> in this {genre} adventure.
+              Thank you for your participation.
             </p>
             <p className="text-sm text-gray-500">
               This session has been recorded for analysis.
@@ -223,15 +225,13 @@ export default function PlayInvitePage() {
     );
   }
 
-  // Playing state - main story interface
+  // Playing state
   return (
     <div className="min-h-screen bg-[#12110f] text-white flex flex-col">
-      {/* Header */}
       <header className="bg-gray-900 border-b border-gray-800 px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-semibold">{characterName}'s Adventure</h1>
-            <p className="text-sm text-gray-400">{genre}</p>
+            <h1 className="text-lg font-semibold">Interactive Session</h1>
           </div>
           <div className="text-xs text-gray-500">
             Interactive Story Session
@@ -239,7 +239,6 @@ export default function PlayInvitePage() {
         </div>
       </header>
 
-      {/* Main story area */}
       <main className="flex-1 p-4 overflow-hidden">
         <div className="max-w-3xl mx-auto h-full">
           <StoryDisplay
@@ -252,14 +251,10 @@ export default function PlayInvitePage() {
         </div>
       </main>
 
-      {/* Error display */}
       {error && (
         <div className="fixed bottom-4 left-4 right-4 max-w-md mx-auto bg-red-900 text-white p-4 rounded-lg">
           <p>{error}</p>
-          <button
-            onClick={() => setError("")}
-            className="mt-2 text-sm underline"
-          >
+          <button onClick={() => setError("")} className="mt-2 text-sm underline">
             Dismiss
           </button>
         </div>
